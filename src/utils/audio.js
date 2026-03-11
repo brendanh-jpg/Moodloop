@@ -266,7 +266,7 @@ function triggerPerc(kit, step) {
   else kit.hihat.triggerAttackRelease('32n')
 }
 
-const JAM_INSTRUMENTS = {
+export const JAM_INSTRUMENTS = {
   chords: ['Warm Pad', 'Crystal Pad'],
   melody: ['Bell Pluck', 'Marimba'],
   bass: ['Sub Bass', 'Round Bass'],
