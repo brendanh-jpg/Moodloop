@@ -47,7 +47,7 @@ export default function Transport({ isPlaying, bpm, onPlay, onPause, onStop, onB
           color: freePlay ? '#fff' : '#94a3b8',
         }}
       >
-        ✦ Free Play
+        ✦ Jam Mode
       </button>
     </div>
   )

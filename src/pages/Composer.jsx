@@ -4,7 +4,7 @@ import MoodPicker from '../components/MoodPicker'
 import StepGrid from '../components/StepGrid'
 import Transport from '../components/Transport'
 import { MOODS } from '../utils/moods'
-import { createDefaultTracks, LoopEngine } from '../utils/audio'
+import { createDefaultTracks, LoopEngine, isJamInstrument, getJamDefaultInstrument } from '../utils/audio'
 import { addEntry, getEntry, updateEntry } from '../utils/storage'
 
 export default function Composer() {
@@ -236,6 +236,13 @@ export default function Composer() {
                 if (next) {
                   handleBpmChange(75)
                   setBpmAutoSet(true)
+                  setTracks((prevTracks) =>
+                    prevTracks.map((t) =>
+                      isJamInstrument(t.type, t.instrument)
+                        ? t
+                        : { ...t, instrument: getJamDefaultInstrument(t.type) }
+                    )
+                  )
                 } else if (bpmAutoSet) {
                   handleBpmChange(90)
                   setBpmAutoSet(false)

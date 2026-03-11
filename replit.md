@@ -23,8 +23,8 @@ src/
     Detail.jsx         - Entry detail view
   components/
     MoodPicker.jsx     - Mood selection grid
-    StepGrid.jsx       - 16-step grid per track with instrument selector
-    Transport.jsx      - Play/Pause/Stop controls, BPM slider, Free Play toggle
+    StepGrid.jsx       - Step grid per track (16 steps standard, 8 in Jam Mode) with instrument selector
+    Transport.jsx      - Play/Pause/Stop controls, BPM slider, Jam Mode toggle
     EntryCard.jsx      - Journal entry card
   utils/
     audio.js           - Tone.js instrument definitions, note arrays, LoopEngine class
@@ -35,7 +35,7 @@ src/
 ## Key Features
 - 5 mood types with color theming
 - 4 track types: Chords (5 instruments), Melody (7 instruments), Bass (5 instruments), Percussion (5 drum kits)
-- Free Play mode: uses pentatonic scale (C D E G A) so any combination sounds harmonious
+- Jam Mode: 8-step grid with pentatonic scale (C D E G A) and curated instruments (2 per track) so any combination sounds harmonious
 - BPM control (60-140)
 - Journal with save/edit/delete
 

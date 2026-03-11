@@ -266,13 +266,33 @@ function triggerPerc(kit, step) {
   else kit.hihat.triggerAttackRelease('32n')
 }
 
+const JAM_INSTRUMENTS = {
+  chords: ['Warm Pad', 'Crystal Pad'],
+  melody: ['Bell Pluck', 'Marimba'],
+  bass: ['Sub Bass', 'Round Bass'],
+  percussion: ['Classic Kit', 'Toy Kit'],
+}
+
 export function getInstrumentOptions(trackType) {
   return Object.keys(INSTRUMENTS[trackType] || {})
+}
+
+export function getJamInstrumentOptions(trackType) {
+  return JAM_INSTRUMENTS[trackType] || []
 }
 
 export function getDefaultInstrument(trackType) {
   const opts = getInstrumentOptions(trackType)
   return opts[0] || ''
+}
+
+export function getJamDefaultInstrument(trackType) {
+  const opts = getJamInstrumentOptions(trackType)
+  return opts[0] || ''
+}
+
+export function isJamInstrument(trackType, instrument) {
+  return (JAM_INSTRUMENTS[trackType] || []).includes(instrument)
 }
 
 export function createDefaultTracks() {
@@ -329,10 +349,11 @@ export class LoopEngine {
     const melodyNotes = freePlay ? PENTA_MELODY_NOTES : MELODY_NOTES
     const bassNotes = freePlay ? PENTA_BASS_NOTES : BASS_NOTES
 
+    const stepCount = freePlay ? 8 : 16
     let step = 0
     this.sequence = new Tone.Sequence(
       (time, _) => {
-        this.currentStep = step % 16
+        this.currentStep = step % stepCount
 
         for (const track of tracks) {
           if (!track.pattern[this.currentStep]) continue
@@ -358,7 +379,7 @@ export class LoopEngine {
 
         step++
       },
-      [...Array(16).keys()],
+      [...Array(stepCount).keys()],
       '16n'
     )
 
