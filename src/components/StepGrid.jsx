@@ -7,7 +7,7 @@ const TRACK_LABELS = {
   percussion: 'Drums',
 }
 
-export default function StepGrid({ tracks, onToggleStep, onInstrumentChange, currentStep, moodHex }) {
+export default function StepGrid({ tracks, onToggleStep, onInstrumentChange, currentStep, moodHex, freePlay }) {
   return (
     <div className="space-y-4">
       {tracks.map((track, trackIdx) => (
@@ -36,12 +36,20 @@ export default function StepGrid({ tracks, onToggleStep, onInstrumentChange, cur
                 <button
                   key={stepIdx}
                   onClick={() => onToggleStep(trackIdx, stepIdx)}
-                  className="w-full aspect-square rounded-md transition-all duration-100 cursor-pointer border"
+                  className="w-full rounded-md transition-all duration-100 cursor-pointer border"
                   style={{
-                    background: active ? moodHex : isCurrent ? '#1e293b' : '#0f172a',
-                    borderColor: isCurrent ? `${moodHex}99` : isBeatStart ? '#334155' : '#1e293b',
-                    opacity: active ? 1 : 0.7,
-                    boxShadow: active && isCurrent ? `0 0 12px ${moodHex}60` : 'none',
+                    aspectRatio: freePlay ? '1 / 1.15' : '1 / 1',
+                    background: active
+                      ? freePlay ? `${moodHex}` : moodHex
+                      : isCurrent ? '#1e293b' : freePlay ? '#1a1033' : '#0f172a',
+                    borderColor: isCurrent ? `${moodHex}99` : isBeatStart ? '#334155' : freePlay ? '#2d2050' : '#1e293b',
+                    opacity: active ? 1 : freePlay ? 0.8 : 0.7,
+                    boxShadow: active && isCurrent
+                      ? `0 0 12px ${moodHex}60`
+                      : active && freePlay
+                        ? `0 0 8px ${moodHex}40`
+                        : 'none',
+                    borderRadius: freePlay ? '0.5rem' : '0.375rem',
                   }}
                 />
               )

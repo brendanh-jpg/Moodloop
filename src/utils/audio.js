@@ -20,6 +20,21 @@ const INSTRUMENTS = {
         envelope: { attack: 0.1, decay: 0.5, sustain: 0.7, release: 1.0 },
         volume: -12,
       }).toDestination(),
+    'Crystal Pad': () =>
+      new Tone.PolySynth(Tone.AMSynth, {
+        harmonicity: 2,
+        oscillator: { type: 'sine' },
+        envelope: { attack: 0.4, decay: 0.6, sustain: 0.5, release: 1.2 },
+        modulation: { type: 'triangle' },
+        modulationEnvelope: { attack: 0.5, decay: 0.3, sustain: 0.8, release: 1.0 },
+        volume: -10,
+      }).toDestination(),
+    'Dreamy Strings': () =>
+      new Tone.PolySynth(Tone.Synth, {
+        oscillator: { type: 'fatsawtooth', spread: 20, count: 3 },
+        envelope: { attack: 0.5, decay: 0.4, sustain: 0.6, release: 1.5 },
+        volume: -14,
+      }).toDestination(),
   },
   melody: {
     'Bell Pluck': () =>
@@ -46,6 +61,24 @@ const INSTRUMENTS = {
         envelope: { attack: 0.01, decay: 0.4, sustain: 0.1, release: 0.5 },
         volume: -8,
       }).toDestination(),
+    'Marimba': () =>
+      new Tone.Synth({
+        oscillator: { type: 'sine' },
+        envelope: { attack: 0.001, decay: 0.4, sustain: 0.0, release: 0.3 },
+        volume: -4,
+      }).toDestination(),
+    'Flute': () =>
+      new Tone.Synth({
+        oscillator: { type: 'sine' },
+        envelope: { attack: 0.1, decay: 0.1, sustain: 0.7, release: 0.4 },
+        volume: -8,
+      }).toDestination(),
+    'Whistle': () =>
+      new Tone.Synth({
+        oscillator: { type: 'sine' },
+        envelope: { attack: 0.08, decay: 0.05, sustain: 0.8, release: 0.3 },
+        volume: -10,
+      }).toDestination(),
   },
   bass: {
     'Sub Bass': () =>
@@ -65,6 +98,18 @@ const INSTRUMENTS = {
         modulationIndex: 5,
         envelope: { attack: 0.01, decay: 0.2, sustain: 0.5, release: 0.2 },
         volume: -8,
+      }).toDestination(),
+    'Upright Bass': () =>
+      new Tone.Synth({
+        oscillator: { type: 'triangle' },
+        envelope: { attack: 0.04, decay: 0.4, sustain: 0.3, release: 0.5 },
+        volume: -6,
+      }).toDestination(),
+    'Punchy Synth': () =>
+      new Tone.Synth({
+        oscillator: { type: 'sawtooth' },
+        envelope: { attack: 0.005, decay: 0.15, sustain: 0.4, release: 0.15 },
+        volume: -10,
       }).toDestination(),
   },
   percussion: {
@@ -131,10 +176,55 @@ const INSTRUMENTS = {
         volume: -14,
       }).toDestination(),
     }),
+    'Toy Kit': () => ({
+      type: 'kit',
+      kick: new Tone.MembraneSynth({
+        pitchDecay: 0.02,
+        octaves: 3,
+        envelope: { attack: 0.005, decay: 0.2, sustain: 0 },
+        volume: -6,
+      }).toDestination(),
+      snare: new Tone.NoiseSynth({
+        noise: { type: 'pink' },
+        envelope: { attack: 0.002, decay: 0.08, sustain: 0 },
+        volume: -10,
+      }).toDestination(),
+      hihat: new Tone.MetalSynth({
+        frequency: 600,
+        envelope: { attack: 0.001, decay: 0.04, release: 0.01 },
+        harmonicity: 4,
+        modulationIndex: 16,
+        resonance: 6000,
+        octaves: 1,
+        volume: -16,
+      }).toDestination(),
+    }),
+    'Jungle Kit': () => ({
+      type: 'kit',
+      kick: new Tone.MembraneSynth({
+        pitchDecay: 0.06,
+        octaves: 5,
+        envelope: { attack: 0.005, decay: 0.25, sustain: 0 },
+        volume: -3,
+      }).toDestination(),
+      snare: new Tone.NoiseSynth({
+        noise: { type: 'white' },
+        envelope: { attack: 0.001, decay: 0.12, sustain: 0 },
+        volume: -7,
+      }).toDestination(),
+      hihat: new Tone.MetalSynth({
+        frequency: 500,
+        envelope: { attack: 0.001, decay: 0.03, release: 0.005 },
+        harmonicity: 6,
+        modulationIndex: 28,
+        resonance: 4500,
+        octaves: 1.2,
+        volume: -13,
+      }).toDestination(),
+    }),
   },
 }
 
-// Note mappings per track type per step (16 steps)
 const CHORD_NOTES = [
   ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'],
   ['F4', 'A4', 'C5'], ['F4', 'A4', 'C5'], ['F4', 'A4', 'C5'], ['F4', 'A4', 'C5'],
@@ -152,8 +242,23 @@ const BASS_NOTES = [
   'G2', 'G2', 'B2', 'B2', 'A2', 'A2', 'E2', 'E2',
 ]
 
-// Percussion: step % 4 determines which drum plays
-// 0 = kick, 2 = snare, 1,3 = hihat
+const PENTA_CHORD_NOTES = [
+  ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'],
+  ['C4', 'E4', 'A4'], ['C4', 'E4', 'A4'], ['C4', 'E4', 'A4'], ['C4', 'E4', 'A4'],
+  ['D4', 'G4', 'A4'], ['D4', 'G4', 'A4'], ['D4', 'G4', 'A4'], ['D4', 'G4', 'A4'],
+  ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'], ['C4', 'E4', 'G4'],
+]
+
+const PENTA_MELODY_NOTES = [
+  'C5', 'D5', 'E5', 'G5', 'A5', 'C6', 'A5', 'G5',
+  'E5', 'D5', 'C5', 'A4', 'G4', 'A4', 'C5', 'D5',
+]
+
+const PENTA_BASS_NOTES = [
+  'C2', 'C2', 'G2', 'G2', 'A2', 'A2', 'E2', 'E2',
+  'D2', 'D2', 'G2', 'G2', 'C2', 'C2', 'E2', 'E2',
+]
+
 function triggerPerc(kit, step) {
   const beat = step % 4
   if (beat === 0) kit.kick.triggerAttackRelease('C1', '8n')
@@ -215,10 +320,14 @@ export class LoopEngine {
     this.synths = {}
   }
 
-  start(tracks, bpm) {
+  start(tracks, bpm, freePlay = false) {
     this.stop()
     Tone.getTransport().bpm.value = bpm
     this.buildSynths(tracks)
+
+    const chordNotes = freePlay ? PENTA_CHORD_NOTES : CHORD_NOTES
+    const melodyNotes = freePlay ? PENTA_MELODY_NOTES : MELODY_NOTES
+    const bassNotes = freePlay ? PENTA_BASS_NOTES : BASS_NOTES
 
     let step = 0
     this.sequence = new Tone.Sequence(
@@ -231,11 +340,11 @@ export class LoopEngine {
           if (!synth) continue
 
           if (track.type === 'chords') {
-            synth.triggerAttackRelease(CHORD_NOTES[this.currentStep], '8n', time)
+            synth.triggerAttackRelease(chordNotes[this.currentStep], '8n', time)
           } else if (track.type === 'melody') {
-            synth.triggerAttackRelease(MELODY_NOTES[this.currentStep], '16n', time)
+            synth.triggerAttackRelease(melodyNotes[this.currentStep], '16n', time)
           } else if (track.type === 'bass') {
-            synth.triggerAttackRelease(BASS_NOTES[this.currentStep], '8n', time)
+            synth.triggerAttackRelease(bassNotes[this.currentStep], '8n', time)
           } else if (track.type === 'percussion' && synth.type === 'kit') {
             triggerPerc(synth, this.currentStep)
           }

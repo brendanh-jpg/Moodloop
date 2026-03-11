@@ -1,4 +1,4 @@
-export default function Transport({ isPlaying, bpm, onPlay, onPause, onStop, onBpmChange }) {
+export default function Transport({ isPlaying, bpm, onPlay, onPause, onStop, onBpmChange, freePlay, onFreePlayToggle }) {
   return (
     <div className="flex items-center gap-4 flex-wrap">
       <div className="flex gap-2">
@@ -37,6 +37,18 @@ export default function Transport({ isPlaying, bpm, onPlay, onPause, onStop, onB
         />
         <span className="text-sm text-slate-300 font-mono w-8">{bpm}</span>
       </div>
+
+      <button
+        onClick={onFreePlayToggle}
+        className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border"
+        style={{
+          background: freePlay ? '#8b5cf6' : 'transparent',
+          borderColor: freePlay ? '#8b5cf6' : '#475569',
+          color: freePlay ? '#fff' : '#94a3b8',
+        }}
+      >
+        ✦ Free Play
+      </button>
     </div>
   )
 }

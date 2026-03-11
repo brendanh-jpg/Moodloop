@@ -20,6 +20,7 @@ export default function Composer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentStep, setCurrentStep] = useState(-1)
   const [title, setTitle] = useState('')
+  const [freePlay, setFreePlay] = useState(false)
 
   // Load existing entry for editing
   useEffect(() => {
@@ -46,9 +47,9 @@ export default function Composer() {
     if (!engine) return
     await engine.init()
     engine.onStepChange = setCurrentStep
-    engine.start(tracks, bpm)
+    engine.start(tracks, bpm, freePlay)
     setIsPlaying(true)
-  }, [tracks, bpm])
+  }, [tracks, bpm, freePlay])
 
   const handlePause = useCallback(() => {
     const engine = engineRef.current
@@ -99,9 +100,9 @@ export default function Composer() {
     if (isPlaying && engineRef.current) {
       engineRef.current.onStepChange = setCurrentStep
       engineRef.current.stop()
-      engineRef.current.start(tracks, bpm)
+      engineRef.current.start(tracks, bpm, freePlay)
     }
-  }, [tracks])
+  }, [tracks, freePlay])
 
   const handleInstrumentChange = useCallback((trackIdx, instrument) => {
     setTracks((prev) =>
@@ -219,6 +220,15 @@ export default function Composer() {
             onPause={handlePause}
             onStop={handleStop}
             onBpmChange={handleBpmChange}
+            freePlay={freePlay}
+            onFreePlayToggle={() => {
+              setFreePlay((prev) => {
+                const next = !prev
+                if (next && bpm === 90) handleBpmChange(75)
+                if (!next && bpm === 75) handleBpmChange(90)
+                return next
+              })
+            }}
           />
 
           <StepGrid
@@ -227,6 +237,7 @@ export default function Composer() {
             onInstrumentChange={handleInstrumentChange}
             currentStep={currentStep}
             moodHex={moodHex}
+            freePlay={freePlay}
           />
 
           <div className="flex gap-3">
