@@ -21,6 +21,7 @@ export default function Composer() {
   const [currentStep, setCurrentStep] = useState(-1)
   const [title, setTitle] = useState('')
   const [freePlay, setFreePlay] = useState(false)
+  const [bpmAutoSet, setBpmAutoSet] = useState(false)
 
   // Load existing entry for editing
   useEffect(() => {
@@ -77,6 +78,14 @@ export default function Composer() {
       }
     },
     []
+  )
+
+  const handleManualBpmChange = useCallback(
+    (newBpm) => {
+      setBpmAutoSet(false)
+      handleBpmChange(newBpm)
+    },
+    [handleBpmChange]
   )
 
   const handleToggleStep = useCallback((trackIdx, stepIdx) => {
@@ -219,13 +228,18 @@ export default function Composer() {
             onPlay={handlePlay}
             onPause={handlePause}
             onStop={handleStop}
-            onBpmChange={handleBpmChange}
+            onBpmChange={handleManualBpmChange}
             freePlay={freePlay}
             onFreePlayToggle={() => {
               setFreePlay((prev) => {
                 const next = !prev
-                if (next && bpm === 90) handleBpmChange(75)
-                if (!next && bpm === 75) handleBpmChange(90)
+                if (next) {
+                  handleBpmChange(75)
+                  setBpmAutoSet(true)
+                } else if (bpmAutoSet) {
+                  handleBpmChange(90)
+                  setBpmAutoSet(false)
+                }
                 return next
               })
             }}
