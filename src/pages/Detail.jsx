@@ -31,7 +31,7 @@ export default function Detail() {
     if (!entry || !engineRef.current) return
     await engineRef.current.init()
     engineRef.current.onStepChange = setCurrentStep
-    engineRef.current.start(entry.tracks, entry.bpm)
+    await engineRef.current.start(entry.tracks, entry.bpm, false, entry.mood)
     setIsPlaying(true)
   }, [entry])
 

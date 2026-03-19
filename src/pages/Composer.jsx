@@ -48,9 +48,9 @@ export default function Composer() {
     if (!engine) return
     await engine.init()
     engine.onStepChange = setCurrentStep
-    engine.start(tracks, bpm, freePlay)
+    await engine.start(tracks, bpm, freePlay, mood)
     setIsPlaying(true)
-  }, [tracks, bpm, freePlay])
+  }, [tracks, bpm, freePlay, mood])
 
   const handlePause = useCallback(() => {
     const engine = engineRef.current
@@ -109,9 +109,9 @@ export default function Composer() {
     if (isPlaying && engineRef.current) {
       engineRef.current.onStepChange = setCurrentStep
       engineRef.current.stop()
-      engineRef.current.start(tracks, bpm, freePlay)
+      engineRef.current.start(tracks, bpm, freePlay, mood)
     }
-  }, [tracks, freePlay])
+  }, [tracks, freePlay, mood])
 
   const handleInstrumentChange = useCallback((trackIdx, instrument) => {
     setTracks((prev) =>

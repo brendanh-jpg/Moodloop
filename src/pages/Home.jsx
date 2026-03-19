@@ -22,12 +22,20 @@ export default function Home() {
           <h1 className="text-2xl font-bold text-white">Moodloop</h1>
           <p className="text-slate-400 text-sm">Your mood music journal</p>
         </div>
-        <Link
-          to="/new"
-          className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-xl font-medium transition-all shadow-lg shadow-blue-900/30"
-        >
-          + New Entry
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            to="/maker"
+            className="px-4 py-2.5 bg-navy-700 hover:bg-navy-600 text-slate-200 rounded-xl font-medium transition-all border border-navy-600"
+          >
+            Music Maker
+          </Link>
+          <Link
+            to="/new"
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-xl font-medium transition-all shadow-lg shadow-blue-900/30"
+          >
+            + New Entry
+          </Link>
+        </div>
       </div>
 
       {/* Mood filter pills */}
