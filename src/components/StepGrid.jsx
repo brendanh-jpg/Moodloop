@@ -18,13 +18,13 @@ export default function StepGrid({ tracks, onToggleStep, onInstrumentChange, cur
         return (
           <div key={track.type} className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 w-16">
+              <span className="text-xs font-semibold uppercase tracking-wider text-ps-gray-500 w-16">
                 {TRACK_LABELS[track.type]}
               </span>
               <select
                 value={track.instrument}
                 onChange={(e) => onInstrumentChange(trackIdx, e.target.value)}
-                className="bg-navy-700 text-slate-300 text-xs rounded-lg px-2 py-1 border border-navy-600 outline-none focus:border-slate-400"
+                className="bg-white text-ps-gray-600 text-xs rounded-full px-3 py-1 border border-ps-gray-200 outline-none focus:border-ps-mauve"
               >
                 {options.map((opt) => (
                   <option key={opt} value={opt}>
@@ -41,20 +41,19 @@ export default function StepGrid({ tracks, onToggleStep, onInstrumentChange, cur
                   <button
                     key={stepIdx}
                     onClick={() => onToggleStep(trackIdx, stepIdx)}
-                    className="w-full rounded-md transition-all duration-100 cursor-pointer border"
+                    className="w-full rounded-lg transition-all duration-100 cursor-pointer border"
                     style={{
                       aspectRatio: freePlay ? '1 / 1.15' : '1 / 1',
                       background: active
                         ? moodHex
-                        : isCurrent ? '#1e293b' : freePlay ? '#1a1033' : '#0f172a',
-                      borderColor: isCurrent ? `${moodHex}99` : isBeatStart ? '#334155' : freePlay ? '#2d2050' : '#1e293b',
-                      opacity: active ? 1 : freePlay ? 0.8 : 0.7,
+                        : isCurrent ? '#f0f0f0' : freePlay ? '#fdf2f8' : '#f7f8f8',
+                      borderColor: isCurrent ? `${moodHex}80` : isBeatStart ? '#ddd' : '#e5e5e5',
+                      opacity: active ? 1 : 0.85,
                       boxShadow: active && isCurrent
-                        ? `0 0 12px ${moodHex}60`
-                        : active && freePlay
-                          ? `0 0 8px ${moodHex}40`
+                        ? `0 0 12px ${moodHex}40`
+                        : active
+                          ? `0 2px 4px ${moodHex}20`
                           : 'none',
-                      borderRadius: freePlay ? '0.5rem' : '0.375rem',
                     }}
                   />
                 )

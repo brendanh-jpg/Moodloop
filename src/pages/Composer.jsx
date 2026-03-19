@@ -95,12 +95,8 @@ export default function Composer() {
       )
       return next
     })
-    // Restart if playing to pick up changes
     if (engineRef.current?.isPlaying) {
-      // We need to restart with new tracks — use a microtask to get updated state
-      setTimeout(() => {
-        // This is handled by the effect below
-      }, 0)
+      setTimeout(() => {}, 0)
     }
   }, [])
 
@@ -144,7 +140,7 @@ export default function Composer() {
     navigate('/')
   }
 
-  const moodHex = mood ? MOODS[mood].hex : '#64748b'
+  const moodHex = mood ? MOODS[mood].hex : '#926b7f'
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
@@ -155,11 +151,11 @@ export default function Composer() {
             handleStop()
             navigate('/')
           }}
-          className="text-slate-400 hover:text-white transition-colors cursor-pointer"
+          className="text-ps-gray-500 hover:text-ps-dark transition-colors cursor-pointer"
         >
           ← Back
         </button>
-        <h1 className="text-xl font-bold text-white">
+        <h1 className="text-xl font-bold text-ps-dark">
           {id ? 'Edit Entry' : 'New Entry'}
         </h1>
       </div>
@@ -171,7 +167,7 @@ export default function Composer() {
             key={s}
             className="h-1 flex-1 rounded-full transition-colors"
             style={{
-              background: ['mood', 'compose', 'save'].indexOf(step) >= i ? moodHex : '#1e293b',
+              background: ['mood', 'compose', 'save'].indexOf(step) >= i ? moodHex : '#e5e5e5',
             }}
           />
         ))}
@@ -181,8 +177,8 @@ export default function Composer() {
       {step === 'mood' && (
         <div className="space-y-6">
           <div className="text-center">
-            <h2 className="text-lg font-semibold text-white mb-1">How are you feeling?</h2>
-            <p className="text-slate-400 text-sm">Pick a mood to color your loop</p>
+            <h2 className="text-lg font-semibold text-ps-dark mb-1">How are you feeling?</h2>
+            <p className="text-ps-gray-500 text-sm">Pick a mood to color your loop</p>
           </div>
 
           <MoodPicker selected={mood} onSelect={setMood} />
@@ -192,18 +188,17 @@ export default function Composer() {
               value={note}
               onChange={(e) => setNote(e.target.value.slice(0, 200))}
               placeholder="Add a note (optional)..."
-              className="w-full bg-navy-800 border border-navy-600 rounded-xl p-3 text-slate-200 text-sm placeholder-slate-500 resize-none outline-none focus:border-slate-400 h-20"
+              className="w-full bg-white border border-ps-gray-200 rounded-2xl p-3 text-ps-dark text-sm placeholder-ps-gray-500 resize-none outline-none focus:border-ps-mauve h-20"
             />
-            <p className="text-xs text-slate-500 text-right">{note.length}/200</p>
+            <p className="text-xs text-ps-gray-500 text-right">{note.length}/200</p>
           </div>
 
           <button
             onClick={() => mood && setStep('compose')}
             disabled={!mood}
-            className="w-full py-3 rounded-xl font-medium transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-full font-medium transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-white"
             style={{
-              background: mood ? moodHex : '#334155',
-              color: 'white',
+              background: mood ? moodHex : '#ddd',
             }}
           >
             Continue to Composer
@@ -219,7 +214,7 @@ export default function Composer() {
             <span className="text-sm font-medium" style={{ color: moodHex }}>
               {MOODS[mood]?.label}
             </span>
-            {note && <span className="text-xs text-slate-500 truncate ml-2">— {note}</span>}
+            {note && <span className="text-xs text-ps-gray-500 truncate ml-2">— {note}</span>}
           </div>
 
           <Transport
@@ -264,13 +259,13 @@ export default function Composer() {
           <div className="flex gap-3">
             <button
               onClick={() => setStep('mood')}
-              className="px-4 py-2.5 bg-navy-700 hover:bg-navy-600 text-slate-300 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2.5 bg-ps-gray-100 hover:bg-ps-gray-200 text-ps-gray-600 rounded-full transition-colors cursor-pointer"
             >
               ← Mood
             </button>
             <button
               onClick={() => setStep('save')}
-              className="flex-1 py-2.5 rounded-xl font-medium text-white transition-all cursor-pointer"
+              className="flex-1 py-2.5 rounded-full font-medium text-white transition-all cursor-pointer"
               style={{ background: moodHex }}
             >
               Save Entry →
@@ -283,8 +278,8 @@ export default function Composer() {
       {step === 'save' && (
         <div className="space-y-6">
           <div className="text-center">
-            <h2 className="text-lg font-semibold text-white mb-1">Name your loop</h2>
-            <p className="text-slate-400 text-sm">Give this moment a title</p>
+            <h2 className="text-lg font-semibold text-ps-dark mb-1">Name your loop</h2>
+            <p className="text-ps-gray-500 text-sm">Give this moment a title</p>
           </div>
 
           <input
@@ -292,13 +287,13 @@ export default function Composer() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Late Night Thoughts..."
-            className="w-full bg-navy-800 border border-navy-600 rounded-xl p-3 text-white text-lg placeholder-slate-500 outline-none focus:border-slate-400"
+            className="w-full bg-white border border-ps-gray-200 rounded-2xl p-3 text-ps-dark text-lg placeholder-ps-gray-500 outline-none focus:border-ps-mauve"
             autoFocus
           />
 
           <div
-            className="p-4 rounded-xl border"
-            style={{ borderColor: `${moodHex}30`, background: `${moodHex}08` }}
+            className="p-4 rounded-2xl border bg-white"
+            style={{ borderColor: `${moodHex}30` }}
           >
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xl">{MOODS[mood]?.emoji}</span>
@@ -306,8 +301,8 @@ export default function Composer() {
                 {MOODS[mood]?.label}
               </span>
             </div>
-            {note && <p className="text-sm text-slate-400">{note}</p>}
-            <p className="text-xs text-slate-500 mt-2">
+            {note && <p className="text-sm text-ps-gray-500">{note}</p>}
+            <p className="text-xs text-ps-gray-500 mt-2">
               {bpm} BPM · {tracks.filter((t) => t.pattern.some(Boolean)).length} active tracks
             </p>
           </div>
@@ -315,14 +310,14 @@ export default function Composer() {
           <div className="flex gap-3">
             <button
               onClick={() => setStep('compose')}
-              className="px-4 py-2.5 bg-navy-700 hover:bg-navy-600 text-slate-300 rounded-xl transition-colors cursor-pointer"
+              className="px-4 py-2.5 bg-ps-gray-100 hover:bg-ps-gray-200 text-ps-gray-600 rounded-full transition-colors cursor-pointer"
             >
               ← Edit Loop
             </button>
             <button
               onClick={handleSave}
               disabled={!title.trim()}
-              className="flex-1 py-2.5 rounded-xl font-medium text-white transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex-1 py-2.5 rounded-full font-medium text-white transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
               style={{ background: moodHex }}
             >
               {id ? 'Update Entry' : 'Save to Journal'}

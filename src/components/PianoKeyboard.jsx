@@ -21,7 +21,7 @@ function buildKeys(startOctave, numOctaves) {
   return keys
 }
 
-export default function PianoKeyboard({ onNotePlay, accentColor = '#3b82f6' }) {
+export default function PianoKeyboard({ onNotePlay, accentColor = '#926b7f' }) {
   const [activeKeys, setActiveKeys] = useState(new Set())
   const keys = buildKeys(4, 2)
   const whiteKeys = keys.filter((k) => !k.isBlack)
@@ -64,12 +64,11 @@ export default function PianoKeyboard({ onNotePlay, accentColor = '#3b82f6' }) {
     }
   }, [playNote])
 
-  // Layout: position black keys relative to white keys
   const whiteKeyWidth = 100 / whiteKeys.length
   const totalWidth = whiteKeys.length
 
   return (
-    <div className="relative select-none" style={{ height: 140 }}>
+    <div className="relative select-none rounded-2xl overflow-hidden border border-ps-gray-200 shadow-sm" style={{ height: 140 }}>
       {/* White keys */}
       {whiteKeys.map((k, i) => {
         const isActive = activeKeys.has(k.note)
@@ -77,15 +76,15 @@ export default function PianoKeyboard({ onNotePlay, accentColor = '#3b82f6' }) {
           <div
             key={k.note}
             onMouseDown={() => playNote(k.note)}
-            className="absolute top-0 bottom-0 border border-navy-600 rounded-b-lg cursor-pointer transition-colors duration-75"
+            className="absolute top-0 bottom-0 border-r border-ps-gray-200 cursor-pointer transition-colors duration-75"
             style={{
               left: `${(i / totalWidth) * 100}%`,
               width: `${whiteKeyWidth}%`,
-              background: isActive ? accentColor : '#e2e8f0',
+              background: isActive ? accentColor : '#ffffff',
               zIndex: 1,
             }}
           >
-            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[9px] text-slate-500 font-mono">
+            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[9px] text-ps-gray-500 font-mono">
               {k.name}{k.octave}
             </span>
           </div>
@@ -93,7 +92,6 @@ export default function PianoKeyboard({ onNotePlay, accentColor = '#3b82f6' }) {
       })}
       {/* Black keys */}
       {whiteKeys.map((wk, i) => {
-        // Find the black key after this white key
         const noteIdx = OCTAVE_NOTES.indexOf(wk.name)
         if (noteIdx === -1) return null
         const sharpName = wk.name + '#'
@@ -113,12 +111,12 @@ export default function PianoKeyboard({ onNotePlay, accentColor = '#3b82f6' }) {
               e.stopPropagation()
               playNote(blackNote)
             }}
-            className="absolute top-0 rounded-b-md cursor-pointer transition-colors duration-75"
+            className="absolute top-0 rounded-b-lg cursor-pointer transition-colors duration-75"
             style={{
               left: `${(offset / whiteKeyWidth / totalWidth) * 100}%`,
               width: `${(blackWidth / whiteKeyWidth / totalWidth) * 100}%`,
               height: '60%',
-              background: isActive ? accentColor : '#1e293b',
+              background: isActive ? accentColor : '#172337',
               zIndex: 2,
             }}
           />

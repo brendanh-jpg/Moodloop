@@ -3,7 +3,7 @@ import { SOUND_PADS } from '../utils/audio'
 
 const PAD_KEYS = Object.keys(SOUND_PADS)
 
-export default function SoundPadGrid({ onPadPlay, accentColor = '#3b82f6' }) {
+export default function SoundPadGrid({ onPadPlay, accentColor = '#926b7f' }) {
   const [activePads, setActivePads] = useState(new Set())
 
   const handlePad = useCallback(
@@ -30,16 +30,16 @@ export default function SoundPadGrid({ onPadPlay, accentColor = '#3b82f6' }) {
           <button
             key={key}
             onMouseDown={() => handlePad(key)}
-            className="flex flex-col items-center justify-center py-4 rounded-xl border-2 transition-all duration-75 cursor-pointer select-none"
+            className="flex flex-col items-center justify-center py-4 rounded-2xl border-2 transition-all duration-75 cursor-pointer select-none"
             style={{
-              borderColor: isActive ? accentColor : '#334155',
-              background: isActive ? `${accentColor}25` : '#0f172a',
+              borderColor: isActive ? accentColor : '#e5e5e5',
+              background: isActive ? `${accentColor}15` : '#f7f8f8',
               transform: isActive ? 'scale(0.95)' : 'scale(1)',
-              boxShadow: isActive ? `0 0 16px ${accentColor}40` : 'none',
+              boxShadow: isActive ? `0 0 16px ${accentColor}30` : '0 1px 3px rgba(0,0,0,0.05)',
             }}
           >
             <span className="text-2xl mb-1">{pad.emoji}</span>
-            <span className="text-xs font-medium text-slate-300">{pad.label}</span>
+            <span className="text-xs font-medium text-ps-gray-600">{pad.label}</span>
           </button>
         )
       })}

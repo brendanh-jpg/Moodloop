@@ -91,7 +91,6 @@ export default function MusicMaker() {
     setIsPlaying(true)
     setPlaybackPos(0)
 
-    // Clear any existing timers
     playbackTimersRef.current.forEach(clearTimeout)
     playbackTimersRef.current = []
 
@@ -109,7 +108,6 @@ export default function MusicMaker() {
       playbackTimersRef.current.push(timer)
     })
 
-    // End playback after last event + buffer
     const lastTime = events[events.length - 1].time
     const endTimer = setTimeout(() => {
       setIsPlaying(false)
@@ -130,7 +128,6 @@ export default function MusicMaker() {
     setEvents([])
   }, [handleStopPlayback])
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       playbackTimersRef.current.forEach(clearTimeout)
@@ -138,27 +135,27 @@ export default function MusicMaker() {
   }, [])
 
   const duration = events.length > 0 ? events[events.length - 1].time : 0
-  const accentColor = '#8b5cf6'
+  const accentColor = '#926b7f'
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Link to="/" className="text-slate-400 hover:text-white transition-colors">
+          <Link to="/" className="text-ps-gray-500 hover:text-ps-dark transition-colors">
             ← Back
           </Link>
-          <h1 className="text-xl font-bold text-white">Music Maker</h1>
+          <h1 className="text-xl font-bold text-ps-dark">Music Maker</h1>
         </div>
       </div>
 
       {/* Instrument selector */}
       <div className="flex items-center gap-3 mb-5">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Keyboard Sound</span>
+        <span className="text-xs font-semibold uppercase tracking-wider text-ps-gray-500">Keyboard Sound</span>
         <select
           value={instrument}
           onChange={(e) => setInstrument(e.target.value)}
-          className="bg-navy-700 text-slate-300 text-sm rounded-lg px-3 py-1.5 border border-navy-600 outline-none focus:border-slate-400"
+          className="bg-white text-ps-gray-600 text-sm rounded-full px-3 py-1.5 border border-ps-gray-200 outline-none focus:border-ps-mauve"
         >
           {MAKER_INSTRUMENTS.map((name) => (
             <option key={name} value={name}>{name}</option>
@@ -168,13 +165,13 @@ export default function MusicMaker() {
 
       {/* Piano Keyboard */}
       <div className="mb-6">
-        <p className="text-xs text-slate-500 mb-2">Click keys or use keyboard: A-J = C4-B4, K-; = C5-E5</p>
+        <p className="text-xs text-ps-gray-500 mb-2">Click keys or use keyboard: A-J = C4-B4, K-; = C5-E5</p>
         <PianoKeyboard onNotePlay={handleNotePlay} accentColor={accentColor} />
       </div>
 
       {/* Sound Pads */}
       <div className="mb-6">
-        <p className="text-xs text-slate-500 mb-2">Sound Pads</p>
+        <p className="text-xs text-ps-gray-500 mb-2">Sound Pads</p>
         <SoundPadGrid onPadPlay={handlePadPlay} accentColor={accentColor} />
       </div>
 
@@ -184,14 +181,14 @@ export default function MusicMaker() {
           <button
             onClick={handleRecord}
             disabled={isPlaying}
-            className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 bg-red-500 hover:bg-red-400 text-white rounded-full font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <span className="w-2.5 h-2.5 bg-white rounded-full" /> Record
           </button>
         ) : (
           <button
             onClick={handleStopRecord}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium cursor-pointer flex items-center gap-2 animate-pulse"
+            className="px-4 py-2 bg-red-500 text-white rounded-full font-medium cursor-pointer flex items-center gap-2 animate-pulse"
           >
             <span className="w-2.5 h-2.5 bg-white rounded-sm" /> Stop
           </button>
@@ -201,14 +198,14 @@ export default function MusicMaker() {
           <button
             onClick={handlePlayback}
             disabled={events.length === 0 || isRecording}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-ps-mauve hover:bg-ps-mauve-light text-white rounded-full font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
             ▶ Play
           </button>
         ) : (
           <button
             onClick={handleStopPlayback}
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg font-medium transition-colors cursor-pointer"
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-full font-medium transition-colors cursor-pointer"
           >
             ⏹ Stop
           </button>
@@ -217,13 +214,13 @@ export default function MusicMaker() {
         <button
           onClick={handleClear}
           disabled={events.length === 0 || isRecording}
-          className="px-4 py-2 bg-navy-700 hover:bg-navy-600 text-slate-300 rounded-lg font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-ps-gray-100 hover:bg-ps-gray-200 text-ps-gray-600 rounded-full font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Clear
         </button>
 
         {events.length > 0 && (
-          <span className="text-xs text-slate-500 ml-auto">
+          <span className="text-xs text-ps-gray-500 ml-auto">
             {events.length} events · {(duration / 1000).toFixed(1)}s
           </span>
         )}
@@ -231,7 +228,7 @@ export default function MusicMaker() {
 
       {/* Timeline */}
       {events.length > 0 && (
-        <div className="relative h-10 bg-navy-800 rounded-lg border border-navy-700 overflow-hidden">
+        <div className="relative h-10 bg-ps-gray-50 rounded-xl border border-ps-gray-200 overflow-hidden">
           {events.map((evt, idx) => {
             const x = duration > 0 ? (evt.time / duration) * 100 : 0
             const isKeyEvt = evt.type === 'key'
@@ -253,7 +250,7 @@ export default function MusicMaker() {
           })}
           {isPlaying && playbackPos >= 0 && duration > 0 && (
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-white/50"
+              className="absolute top-0 bottom-0 w-0.5 bg-ps-mauve/50"
               style={{ left: `${(events[playbackPos]?.time / duration) * 100}%` }}
             />
           )}
