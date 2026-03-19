@@ -11,6 +11,21 @@ function wrapNoteSnare(synth, note = 'C4') {
   }
 }
 
+// Helper: create a Tone.Player for real animal sound samples
+// Returns an object matching the synth API (triggerAttackRelease, dispose, disconnect, chain, connect)
+function createAnimalPlayer(path) {
+  const player = new Tone.Player(path).toDestination()
+  return {
+    triggerAttackRelease: () => {
+      if (player.loaded) { player.stop(); player.start() }
+    },
+    dispose: () => player.dispose(),
+    disconnect: () => player.disconnect(),
+    chain: (...args) => player.chain(...args),
+    connect: (...args) => player.connect(...args),
+  }
+}
+
 const INSTRUMENTS = {
   chords: {
     'Warm Pad': () =>
@@ -103,22 +118,8 @@ const INSTRUMENTS = {
         envelope: { attack: 0.08, decay: 0.05, sustain: 0.8, release: 0.3 },
         volume: -10,
       }).toDestination(),
-    'Cat Meow': () =>
-      new Tone.FMSynth({
-        modulationIndex: 2,
-        harmonicity: 1.5,
-        envelope: { attack: 0.05, decay: 0.3, sustain: 0.1, release: 0.2 },
-        modulation: { type: 'sine' },
-        modulationEnvelope: { attack: 0.1, decay: 0.2, sustain: 0, release: 0.1 },
-        volume: -6,
-      }).toDestination(),
-    'Bird Song': () =>
-      new Tone.FMSynth({
-        modulationIndex: 12,
-        harmonicity: 3,
-        envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 },
-        volume: -8,
-      }).toDestination(),
+    'Cat Meow': () => createAnimalPlayer('/sounds/cat-meow.mp3'),
+    'Bird Song': () => createAnimalPlayer('/sounds/bird-chirp.mp3'),
   },
   bass: {
     'Sub Bass': () =>
@@ -151,20 +152,8 @@ const INSTRUMENTS = {
         envelope: { attack: 0.005, decay: 0.15, sustain: 0.4, release: 0.15 },
         volume: -10,
       }).toDestination(),
-    'Elephant Stomp': () =>
-      new Tone.MembraneSynth({
-        pitchDecay: 0.15,
-        octaves: 8,
-        envelope: { attack: 0.01, decay: 0.6, sustain: 0, release: 0.3 },
-        volume: -2,
-      }).toDestination(),
-    'Bear Growl': () =>
-      new Tone.FMSynth({
-        modulationIndex: 10,
-        harmonicity: 0.5,
-        envelope: { attack: 0.05, decay: 0.4, sustain: 0.2, release: 0.3 },
-        volume: -4,
-      }).toDestination(),
+    'Elephant Stomp': () => createAnimalPlayer('/sounds/elephant.mp3'),
+    'Bear Growl': () => createAnimalPlayer('/sounds/bear-growl.mp3'),
   },
   percussion: {
     'Classic Kit': () => ({
@@ -277,36 +266,18 @@ const INSTRUMENTS = {
       }).toDestination(),
     }),
     'Animal Farm': () => {
-      // Cowbell-like kick
+      // Low thud kick (synth is fine for this)
       const kick = new Tone.MembraneSynth({
         pitchDecay: 0.03,
         octaves: 2,
         envelope: { attack: 0.001, decay: 0.15, sustain: 0 },
         volume: -4,
       }).toDestination()
-      // Duck quack snare (FMSynth wrapped to match NoiseSynth API)
-      const quackSynth = new Tone.FMSynth({
-        modulationIndex: 8,
-        harmonicity: 1.5,
-        envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0.05 },
-        volume: -6,
-      }).toDestination()
-      const snare = wrapNoteSnare(quackSynth, 'G4')
-      // Bird chirp hihat
-      const hihat = new Tone.Synth({
-        oscillator: { type: 'sine' },
-        envelope: { attack: 0.001, decay: 0.06, sustain: 0, release: 0.02 },
-        volume: -8,
-      }).toDestination()
-      // Wrap hihat to match MetalSynth API (triggerAttackRelease(duration, time))
-      const hihatWrapped = {
-        triggerAttackRelease: (dur, time) => hihat.triggerAttackRelease('C7', dur, time),
-        dispose: () => hihat.dispose(),
-        disconnect: () => hihat.disconnect(),
-        chain: (...args) => hihat.chain(...args),
-        connect: (...args) => hihat.connect(...args),
-      }
-      return { type: 'kit', kick, snare, hihat: hihatWrapped }
+      // Real duck quack sample
+      const snare = createAnimalPlayer('/sounds/duck-quack.mp3')
+      // Real bird chirp sample
+      const hihat = createAnimalPlayer('/sounds/bird-chirp.mp3')
+      return { type: 'kit', kick, snare, hihat }
     },
   },
 }
@@ -670,30 +641,18 @@ export const SOUND_PADS = {
   },
   meow: {
     label: 'Meow', emoji: '\u{1F431}',
-    create: () => new Tone.FMSynth({
-      modulationIndex: 2, harmonicity: 1.5,
-      envelope: { attack: 0.05, decay: 0.3, sustain: 0.1, release: 0.2 },
-      volume: -6,
-    }).toDestination(),
-    trigger: (s) => s.triggerAttackRelease('A4', '8n'),
+    create: () => createAnimalPlayer('/sounds/cat-meow.mp3'),
+    trigger: (s) => s.triggerAttackRelease(),
   },
   bird: {
     label: 'Bird', emoji: '\u{1F426}',
-    create: () => new Tone.FMSynth({
-      modulationIndex: 12, harmonicity: 3,
-      envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 },
-      volume: -8,
-    }).toDestination(),
-    trigger: (s) => s.triggerAttackRelease('C7', '16n'),
+    create: () => createAnimalPlayer('/sounds/bird-chirp.mp3'),
+    trigger: (s) => s.triggerAttackRelease(),
   },
   growl: {
     label: 'Growl', emoji: '\u{1F43B}',
-    create: () => new Tone.FMSynth({
-      modulationIndex: 10, harmonicity: 0.5,
-      envelope: { attack: 0.05, decay: 0.4, sustain: 0.2, release: 0.3 },
-      volume: -4,
-    }).toDestination(),
-    trigger: (s) => s.triggerAttackRelease('E2', '4n'),
+    create: () => createAnimalPlayer('/sounds/bear-growl.mp3'),
+    trigger: (s) => s.triggerAttackRelease(),
   },
   clap: {
     label: 'Clap', emoji: '\u{1F44F}',
